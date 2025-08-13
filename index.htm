@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный билет</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Размытые лепестки -->
+    <div class="falling-blurred"></div>
+
+    <!-- Чёткие лепестки -->
+    <div class="falling"></div>
+
+    <!-- Билет -->
+    <div class="ticket">
+        <div class="ticket-header">
+            <h1 id="typed-text"></h1>
+        </div>
+        <hr class="ticket-line">
+        <div class="ticket-body">
+            <p>Готовы принять приглашение?</p>
+            <div class="buttons">
+                <button class="yes-btn">Да, с радостью! 💖</button>
+                <button class="no-btn">Извини, не смогу 😢</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сообщение -->
+    <div class="message-overlay" id="message">
+        <div class="message-box">
+            <h2>💖 Ура! Жду нашу прогулку 💖</h2>
+            <button class="close-btn">Закрыть</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
