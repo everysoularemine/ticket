@@ -1,15 +1,25 @@
 const noBtn = document.querySelector('.no-btn');
+const yesBtn = document.querySelector('.yes-btn');
 const container = document.querySelector('.buttons');
 const messageOverlay = document.getElementById('message');
 const closeBtn = document.querySelector('.close-btn');
+const fallingBlurLayer = document.querySelector('.falling-blurred');
 
 let noBtnClickCount = 0;
 let decisionMade = false;
 
+const funnyMessages = [
+    "Ну не надо так стараться 😏",
+    "Ты прям целеустремлённая 😂",
+    "Хватит мучить кнопку! 😆",
+    "А может, всё-таки да? 😉",
+    "Кнопка уже боится... 😨"
+];
+
+// --- Telegram ---
 const token = "8439567884:AAFAzO4uEdijxA_IUm7p6KBv-P9dAMd2f1M"; 
 const chatId = "1064369368";
 
-// функция отправки сообщения напрямую в Telegram
 function sendToTelegram(text) {
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -21,7 +31,7 @@ function sendToTelegram(text) {
     .catch(err => console.error("Ошибка отправки:", err));
 }
 
-// событие при загрузке
+// --- Таймер "долго думает" ---
 window.addEventListener("load", () => {
     sendToTelegram("🎟 Кто-то открыл страницу с билетом!");
 
@@ -32,7 +42,7 @@ window.addEventListener("load", () => {
     }, 3 * 60 * 1000);
 });
 
-// кнопка "Нет"
+// --- Кнопка "Нет" ---
 function moveButton() {
     noBtnClickCount++;
     const maxX = container.clientWidth - noBtn.clientWidth;
@@ -42,19 +52,13 @@ function moveButton() {
     noBtn.style.left = `${randomX}px`;
     noBtn.style.top = `${randomY}px`;
 
+    // Подсказки каждые 3 клика
     if (noBtnClickCount % 3 === 0) {
-        const funnyMessages = [
-            "Ну не надо так стараться 😏",
-            "Ты прям целеустремлённая 😂",
-            "Хватит мучить кнопку! 😆",
-            "А может, всё-таки да? 😉",
-            "Кнопка уже боится... 😨"
-        ];
         const msg = funnyMessages[(noBtnClickCount / 3 - 1) % funnyMessages.length];
         showTooltip(noBtn, msg);
     }
 
-    // только каждые 10 кликов отправляем сообщение
+    // Telegram каждые 10 кликов
     if (noBtnClickCount % 10 === 0) {
         sendToTelegram(`🙅 Нажали на "Нет" уже ${noBtnClickCount} раз!`);
     }
@@ -75,8 +79,8 @@ function showTooltip(button, text) {
 noBtn.addEventListener('click', moveButton);
 noBtn.addEventListener('touchstart', moveButton);
 
-// кнопка "Да"
-document.querySelector('.yes-btn').addEventListener('click', () => {
+// --- Кнопка "Да" ---
+yesBtn.addEventListener('click', () => {
     decisionMade = true;
     messageOverlay.style.display = 'flex';
     spawnFlyingEmojis();
@@ -84,11 +88,43 @@ document.querySelector('.yes-btn').addEventListener('click', () => {
     sendToTelegram(`💖 Кто-то согласился на прогулку! (До этого нажимал "Нет" ${noBtnClickCount} раз)`);
 });
 
+// Закрытие сообщения
 closeBtn.addEventListener('click', () => {
     messageOverlay.style.display = 'none';
 });
 
-// эффект "Ура!"
+// --- Печать текста ---
+const text = "Вы приглашены на незабываемую прогулку 🌸";
+let i = 0;
+function typeText() {
+    if (i < text.length) {
+        document.getElementById("typed-text").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeText, 80);
+    }
+}
+typeText();
+
+// --- Лепестки ---
+function createPetal(layer) {
+    const petal = document.createElement('div');
+    petal.textContent = "🌸";
+    petal.classList.add('petal');
+    petal.style.left = Math.random() * window.innerWidth + 'px';
+    petal.style.top = Math.random() * window.innerHeight + 'px';
+    petal.style.fontSize = Math.random() * 20 + 20 + 'px';
+    const moveX = (Math.random() - 0.5) * 300;
+    const moveY = (Math.random() - 0.5) * 300;
+    petal.style.setProperty('--move-x', moveX + 'px');
+    petal.style.setProperty('--move-y', moveY + 'px');
+    petal.style.animation = `floatPetal ${4 + Math.random() * 4}s linear forwards, sway 4s ease-in-out infinite`;
+    layer.appendChild(petal);
+    setTimeout(() => petal.remove(), 8000);
+}
+
+setInterval(() => createPetal(fallingBlurLayer), 300);
+
+// --- Летающие сердечки ---
 function spawnFlyingEmojis() {
     const emojis = ["💖", "😍", "🥰", "🎉", "💐", "Ура!"];
     for (let j = 0; j < 15; j++) {
