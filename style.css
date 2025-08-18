@@ -134,17 +134,7 @@ button:hover {
     cursor: pointer;
 }
 
-/* Падающие лепестки — два слоя */
-.falling {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Чёткие сверху */
-}
-
+/* Падающие лепестки — все размытые */
 .falling-blurred {
     position: fixed;
     top: 0;
@@ -152,14 +142,14 @@ button:hover {
     pointer-events: none;
     width: 100%;
     height: 100%;
-    z-index: -2; /* Размытые снизу */
-    filter: blur(3px);
+    z-index: -2;
 }
-
 
 .petal {
     position: absolute;
     animation: sway 4s ease-in-out infinite;
+    filter: blur(3px); /* размытые */
+    opacity: 0.8;
 }
 
 @keyframes sway {
@@ -180,6 +170,7 @@ button:hover {
     font-size: 24px;
     pointer-events: none;
     animation: flyAway 1.5s ease-out forwards;
+    z-index: 9999; /* Поверх всего */
 }
 
 @keyframes flyAway {
@@ -204,11 +195,4 @@ button:hover {
 }
 .no-btn.show-tooltip .no-btn-tooltip {
     opacity: 1;
-}
-.fly {
-    position: fixed;
-    font-size: 24px;
-    pointer-events: none;
-    animation: flyAway 1.5s ease-out forwards;
-    z-index: 9999; /* Поверх всего */
 }
